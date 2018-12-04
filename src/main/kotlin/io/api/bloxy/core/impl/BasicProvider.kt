@@ -1,6 +1,7 @@
 package io.api.bloxy.core.impl
 
 import com.beust.klaxon.Klaxon
+import io.api.bloxy.deserialisation.JsonDeserializer
 import io.api.bloxy.error.BloxyException
 import io.api.bloxy.error.HttpException
 import io.api.bloxy.error.ParseException
@@ -27,6 +28,7 @@ abstract class BasicProvider(private val client: IHttpClient, module: String, ke
     private val base = "https://bloxy.info/api/$module/"
     private val keyParam = "&key=$key&format=structure"
 
+    protected val conv = JsonDeserializer()
     protected val converter = Klaxon().fieldConverter(KlaxonArgs::class, KlaxonConverters.argsConverter)
 
     /**
@@ -66,6 +68,7 @@ abstract class BasicProvider(private val client: IHttpClient, module: String, ke
     @NotNull
     protected inline fun <reified T> parse(json: String, skipErrors: List<Regex> = emptyList()): List<T> {
         return try {
+            val array = conv.parseArray<T>(json)
             if (json.isBlank()) emptyList() else converter.parseArray(json) ?: emptyList()
         } catch (e: Exception) {
             try {

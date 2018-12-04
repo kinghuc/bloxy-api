@@ -107,7 +107,7 @@ BloxyApi api = new BloxyApi("YourApiKey", supplier);
 
 *Kotlin*
 ```kotlin
-val api = BloxyApi("YourApiKey", Supplier { HttpClient(6000, 10000) })
+val api = BloxyApi("YourApiKey", Supplier { HttpClient(6000, 40000) })
 ```
 
 ## API Examples
